@@ -33,27 +33,43 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
 
 */
 @mixin autoscale-font (
-  $min-screen-width, $min-font-size,
-  $max-screen-width, $max-font-size,
-  $default-font-size: $max-font-size // Optional
+  $list_of_breakpoints_and_sizes
 ) {
 
-   // Default desktop
-  font-size: #{$max-font-size}px;
-  font-size: calc( #{$min-font-size}px + (#{$max-font-size} - #{$min-font-size}) * ( ( 100vw - #{$min-screen-width}px ) / ( #{$max-screen-width} - #{$min-screen-width} ) ) );
-  // Define minimun only if necessary
-  @media only screen and (max-width: #{$min-screen-width}px) {
-    & {
-      color: cyan;
-      font-size: #{$min-font-size}px;
+  @each $bpas in $list_of_breakpoints_and_sizes {
+
+    $bp: nth($bpas, 1); // Breakpoint
+    $sz: nth($bpas, 2); // Size
+
+    // First rule
+    // Default size on desktop
+    @if $bpas == nth($list_of_breakpoints_and_sizes, 1) {
+      & {
+        font-size: #{$sz}px;
+        color: cyan;
+      }
     }
+
+    // Not the first, neither last
+    @if $bpas != nth($list_of_breakpoints_and_sizes, 1) and $bpas != nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+      @media only screen and (max-width: $bp) {
+        & {
+          font-size: #{$sz}px;
+          color: red;
+        }
+      }
+    }
+
+    // Is last item of list
+    @if $bpas == nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+      @media only screen and (max-width: $bp) {
+        & {
+          font-size: #{$sz}px;
+          color: blue;
+        }
+      }
+    } // @if
+
   }
 
-  // Upper limit
-  @media only screen and (min-width: #{$max-screen-width}px) {
-    & {
-      font-size: #{$max-font-size}px ;
-      color: pink;
-    }
-  }
 }

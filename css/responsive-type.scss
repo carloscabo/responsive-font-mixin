@@ -7,10 +7,12 @@ body {
 }
 
 h1.title {
-  @include autoscale-font (
-     //  320 screen width -> font size 24px
-    767,  24,
+  @include autoscale-font ((
     // 1600 screen width -> font size 64px
-    1600, 64
-  );
+    ( $small_desktop, 64, 72 ),
+    //  768 screen width -> font size 48px
+    ( $tablet, 32, 48 ),
+    //  below 768 screen width -> font size 36px
+    ( $mobile, 24, 32 )
+  ));
 }

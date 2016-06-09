@@ -1,0 +1,25 @@
+/*
+
+//  320 screen width -> font size 24px
+( $mobile,  24 ),
+
+// Default desktop
+font-size: #{$max-font-size}px;
+font-size: calc( #{$min-font-size}px + (#{$max-font-size} - #{$min-font-size}) * ( ( 100vw - #{$min-screen-width}px ) / ( #{$max-screen-width} - #{$min-screen-width} ) ) );
+// Define minimun only if necessary
+@media only screen and (max-width: #{$min-screen-width}px) {
+ & {
+   color: cyan;
+   font-size: #{$min-font-size}px;
+ }
+}
+
+// Upper limit
+@media only screen and (min-width: #{$max-screen-width}px) {
+ & {
+   font-size: #{$max-font-size}px ;
+   color: pink;
+ }
+}
+
+*/

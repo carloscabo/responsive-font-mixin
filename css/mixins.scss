@@ -1,7 +1,7 @@
 $small_desktop: 1240px;
 $tablet: 1023px;
 $mobile: 767px;
-$small_mobile: 320px;
+$small_mobile: 360px;
 
 // Responsive breakpoints
 @mixin media($breakpoint) {
@@ -10,29 +10,6 @@ $small_mobile: 320px;
   }
 }
 
-/*
-Scales a font proportionally to the screen size, from -> to
-All parameters are pixels, but don't add the 'px' units!
-
-It adds mediaqueries to fix font-size upper and lower limit
-
-@include autoscale-font (
-   //  320 screen width -> font size 24px
-  320,  24,
-  // 1600 screen width -> font size 64px
-  1600, 64
-);
-
-Outputs something like:
-font-size: 64px;
-font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
-@media only screen and (min-width: 1600px)
-  .title {
-    font-size: 64px;
-  }
-}
-
-*/
 @mixin autoscale-font (
   $list_of_breakpoints_and_sizes
 ) {
@@ -41,19 +18,30 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
   $prev-sz: '';
   $prev-lh: '';
 
-  @each $bpas in $list_of_breakpoints_and_sizes {
+  /* Create a list of breakpoints only */
+  $bps: ();
+  @each $lbpas in $list_of_breakpoints_and_sizes {
+    $bp: nth($lbpas, 1);
+    @if type-of($bp) == 'number' and not unitless($bp) {
+      $bp: $bp / ($bp * 0 + 1);
+    }
+    $bps: append( $bps, $bp);
+  }
 
-    $bp: nth($bpas, 1); // Breakpoint
+  $current_idx: 1;
+  @each $lbpas in $list_of_breakpoints_and_sizes {
+
+    $bp: nth($lbpas, 1); // Breakpoint
     // Remove bp unit
     @if type-of($bp) == 'number' and not unitless($bp) {
       $bp: $bp / ($bp * 0 + 1);
     }
-    $sz: nth($bpas, 2); // Size
-    $lh: nth($bpas, 3); // Line height
+    $sz: nth($lbpas, 2); // Size
+    $lh: nth($lbpas, 3); // Line height
 
     // First rule
     // Default size on desktop
-    @if $bpas == nth($list_of_breakpoints_and_sizes, 1) {
+    @if $lbpas == nth($list_of_breakpoints_and_sizes, 1) {
       & {
         font-size: #{$sz}px;
         line-height: #{$lh}px;
@@ -62,19 +50,35 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
     }
 
     // Not the first, neither last
-    @if $bpas != nth($list_of_breakpoints_and_sizes, 1) and $bpas != nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+    @if $lbpas != nth($list_of_breakpoints_and_sizes, 1) and $lbpas != nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+
+      $bp-prev:    nth( $bps, $current_idx - 1 );
+      $bp-current: nth( $bps, $current_idx );
+      $bp-next:    nth( $bps, $current_idx + 1 );
+
       @media only screen and (max-width: #{$bp}px) {
         & {
+
+          /* Font size */
           font-size: #{$sz}px;
-          font-size: calc( #{$sz}px + ( #{$prev-sz} - #{$sz} ) * ( ( 100vw - #{$bp}px ) / ( #{$prev-bp} - #{$bp} ) ) );
-          /*font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 768px ) / ( 1024 - 768 ) ) );*/
-          color: red;
+          font-size: calc( #{$sz}px + ( #{$prev-sz} - #{$sz} ) * ( ( 100vw - #{$bp-next}px ) / ( #{$bp} - #{$bp-next} ) ) );
+          /* font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 768px ) / ( 1024 - 768 ) ) ); */
+
+          /* Lineheight */
+          line-height: #{$lh}px;
+          line-height: calc( #{$lh}px + ( #{$prev-lh} - #{$lh} ) * ( ( 100vw - #{$bp-next}px ) / ( #{$bp} - #{$bp-next} ) ) );
+
+          /* Random color */
+          $red:   random(256)-1;
+          $green: random(256)-1;
+          $blue:  random(256)-1;
+          color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
         }
       }
     }
 
     // Is last item of list
-    @if $bpas == nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+    @if $lbpas == nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
       @media only screen and (max-width: #{$bp}px) {
         & {
           font-size: #{$sz}px;
@@ -87,6 +91,7 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
     $prev-bp: $bp;
     $prev-sz: $sz;
     $prev-lh: $lh;
+    $current_idx: $current_idx + 1;
 
   } // @each
 

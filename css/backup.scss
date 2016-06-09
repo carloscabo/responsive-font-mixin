@@ -20,3 +20,29 @@ font-size: calc( #{$min-font-size}px + (#{$max-font-size} - #{$min-font-size}) *
    color: pink;
  }
 }
+
+/**** ***** ** **
+
+/*
+Scales a font proportionally to the screen size, from -> to
+All parameters are pixels, but don't add the 'px' units!
+
+It adds mediaqueries to fix font-size upper and lower limit
+
+@include autoscale-font (
+   //  320 screen width -> font size 24px
+  320,  24,
+  // 1600 screen width -> font size 64px
+  1600, 64
+);
+
+Outputs something like:
+font-size: 64px;
+font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
+@media only screen and (min-width: 1600px)
+  .title {
+    font-size: 64px;
+  }
+}
+
+***** * * * **** */

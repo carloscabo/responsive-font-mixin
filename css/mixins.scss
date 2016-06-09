@@ -1,6 +1,7 @@
 $small_desktop: 1240px;
 $tablet: 1023px;
 $mobile: 767px;
+$small_mobile: 320px;
 
 // Responsive breakpoints
 @mixin media($breakpoint) {
@@ -36,25 +37,37 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
   $list_of_breakpoints_and_sizes
 ) {
 
+  $prev-bp: '';
+  $prev-sz: '';
+  $prev-lh: '';
+
   @each $bpas in $list_of_breakpoints_and_sizes {
 
     $bp: nth($bpas, 1); // Breakpoint
+    // Remove bp unit
+    @if type-of($bp) == 'number' and not unitless($bp) {
+      $bp: $bp / ($bp * 0 + 1);
+    }
     $sz: nth($bpas, 2); // Size
+    $lh: nth($bpas, 3); // Line height
 
     // First rule
     // Default size on desktop
     @if $bpas == nth($list_of_breakpoints_and_sizes, 1) {
       & {
         font-size: #{$sz}px;
-        color: cyan;
+        line-height: #{$lh}px;
+        color: orange;
       }
     }
 
     // Not the first, neither last
     @if $bpas != nth($list_of_breakpoints_and_sizes, 1) and $bpas != nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
-      @media only screen and (max-width: $bp) {
+      @media only screen and (max-width: #{$bp}px) {
         & {
           font-size: #{$sz}px;
+          font-size: calc( #{$sz}px + ( #{$prev-sz} - #{$sz} ) * ( ( 100vw - #{$bp}px ) / ( #{$prev-bp} - #{$bp} ) ) );
+          /*font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 768px ) / ( 1024 - 768 ) ) );*/
           color: red;
         }
       }
@@ -62,14 +75,19 @@ font-size: calc( 24px + (64 - 24) * ( ( 100vw - 320px ) / ( 1600 - 320 ) ) );
 
     // Is last item of list
     @if $bpas == nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
-      @media only screen and (max-width: $bp) {
+      @media only screen and (max-width: #{$bp}px) {
         & {
           font-size: #{$sz}px;
+          line-height: #{$lh}px;
           color: blue;
         }
       }
     } // @if
 
-  }
+    $prev-bp: $bp;
+    $prev-sz: $sz;
+    $prev-lh: $lh;
+
+  } // @each
 
 }

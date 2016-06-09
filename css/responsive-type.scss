@@ -1,5 +1,8 @@
 body {
   padding: 48px;
+  font-size: calc( 24px + ( ( 64 - 24 ) * ( 100wv - 320px ) / ( 768 - 320 ) )
+  );
+font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 320px ) / ( 768 - 320 ) ) );
 }
 
 #main-container {
@@ -11,8 +14,10 @@ h1.title {
     // 1600 screen width -> font size 64px
     ( $small_desktop, 64, 72 ),
     //  768 screen width -> font size 48px
-    ( $tablet, 32, 48 ),
+    ( $tablet, 32, 52 ),
     //  below 768 screen width -> font size 36px
-    ( $mobile, 24, 32 )
+    ( $mobile, 24, 24 ),
+    // Minimun size avilable
+    ( 360, 18, 24 )
   ));
 }

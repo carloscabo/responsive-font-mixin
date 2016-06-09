@@ -1,0 +1,16 @@
+body {
+  padding: 48px;
+}
+
+#main-container {
+  max-width: 800px;
+}
+
+h1.title {
+  @include autoscale-font (
+     //  320 screen width -> font size 24px
+    767,  24,
+    // 1600 screen width -> font size 64px
+    1600, 64
+  );
+}

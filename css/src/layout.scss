@@ -1,5 +1,6 @@
 body {
   padding: 48px;
+  background-color: #f0f0f0;
 }
 
 #main-container {
@@ -7,6 +8,7 @@ body {
 }
 
 h1.title {
+  margin: 0;
   @include autoscale-font (
     (
       // Breakpoint, font-size, line-height
@@ -14,7 +16,7 @@ h1.title {
       ( $tablet,        32, 80 ),
       ( $mobile,        24, 32 ),
       // Down limit to fix minimun size
-      ( 360 )
+      ( $small_mobile ) // 360
     ),
     true // debug
   );

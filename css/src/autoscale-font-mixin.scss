@@ -1,15 +1,4 @@
-$small_desktop: 1240px;
-$tablet: 1023px;
-$mobile: 767px;
-$small_mobile: 360px;
-
-// Responsive breakpoints
-@mixin media($breakpoint) {
-  @media only screen and (max-width: $breakpoint) {
-    @content;
-  }
-}
-
+// Autoscale magic!
 @mixin autoscale-font (
   $list_of_breakpoints_and_sizes,
   $debug: false

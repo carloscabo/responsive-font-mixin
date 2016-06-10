@@ -1,2 +1,3 @@
-@import "mixins.scss";
-@import "responsive-type.scss";
+@import "src/vars.scss";
+@import "src/autoscale-font-mixin.scss";
+@import "src/layout.scss";

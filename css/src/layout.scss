@@ -11,7 +11,7 @@ h1.title {
   margin: 0;
   @include responsive-font (
     (
-      // Breakpoint, font-size, line-height
+      // Breakpoint (px), font-size (px), line-height (px)
       ( $small_desktop, 64, 72 ),
       ( $tablet,        32, 80 ),
       ( $mobile,        24, 32 ),

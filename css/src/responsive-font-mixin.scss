@@ -1,5 +1,5 @@
 // Autoscale magic!
-@mixin autoscale-font (
+@mixin responsive-font (
   $list_of_breakpoints_and_sizes,
   $debug: false
 ) {

@@ -9,7 +9,7 @@ body {
 
 h1.title {
   margin: 0;
-  @include autoscale-font (
+  @include responsive-font (
     (
       // Breakpoint, font-size, line-height
       ( $small_desktop, 64, 72 ),

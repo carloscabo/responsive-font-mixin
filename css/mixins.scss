@@ -11,10 +11,11 @@ $small_mobile: 360px;
 }
 
 @mixin autoscale-font (
-  $list_of_breakpoints_and_sizes
+  $list_of_breakpoints_and_sizes,
+  $debug: false
 ) {
 
-  $prev-bp: '';
+  /* Used to store previous breakpoint values */
   $prev-sz: '';
   $prev-lh: '';
 
@@ -28,6 +29,7 @@ $small_mobile: 360px;
     $bps: append( $bps, $bp);
   }
 
+  /* From this point the relues / calcs are created */
   $current_idx: 1;
   @each $lbpas in $list_of_breakpoints_and_sizes {
 
@@ -36,8 +38,15 @@ $small_mobile: 360px;
     @if type-of($bp) == 'number' and not unitless($bp) {
       $bp: $bp / ($bp * 0 + 1);
     }
-    $sz: nth($lbpas, 2); // Size
-    $lh: nth($lbpas, 3); // Line height
+    // If its not the last item we get size al lineheighgt
+    // else
+    @if $lbpas == nth($list_of_breakpoints_and_sizes, length($list_of_breakpoints_and_sizes)) {
+      $sz: $prev-sz;
+      $lh: $prev-lh;
+    } @else {
+      $sz: nth($lbpas, 2); // Size
+      $lh: nth($lbpas, 3); // Line height
+    }
 
     // First rule
     // Default size on desktop
@@ -45,7 +54,15 @@ $small_mobile: 360px;
       & {
         font-size: #{$sz}px;
         line-height: #{$lh}px;
-        color: orange;
+
+        /* Random color */
+        @if $debug {
+          $red:   random(256)-1;
+          $green: random(256)-1;
+          $blue:  random(256)-1;
+          color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
+        }
+
       }
     }
 
@@ -69,10 +86,13 @@ $small_mobile: 360px;
           line-height: calc( #{$lh}px + ( #{$prev-lh} - #{$lh} ) * ( ( 100vw - #{$bp-next}px ) / ( #{$bp} - #{$bp-next} ) ) );
 
           /* Random color */
-          $red:   random(256)-1;
-          $green: random(256)-1;
-          $blue:  random(256)-1;
-          color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
+          @if $debug {
+            $red:   random(256)-1;
+            $green: random(256)-1;
+            $blue:  random(256)-1;
+            color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
+          }
+
         }
       }
     }
@@ -83,12 +103,19 @@ $small_mobile: 360px;
         & {
           font-size: #{$sz}px;
           line-height: #{$lh}px;
-          color: blue;
+
+          /* Random color */
+          @if $debug {
+            $red:   random(256)-1;
+            $green: random(256)-1;
+            $blue:  random(256)-1;
+            color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
+          }
+
         }
       }
     } // @if
 
-    $prev-bp: $bp;
     $prev-sz: $sz;
     $prev-lh: $lh;
     $current_idx: $current_idx + 1;

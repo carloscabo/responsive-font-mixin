@@ -1,8 +1,5 @@
 body {
   padding: 48px;
-  font-size: calc( 24px + ( ( 64 - 24 ) * ( 100wv - 320px ) / ( 768 - 320 ) )
-  );
-font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 320px ) / ( 768 - 320 ) ) );
 }
 
 #main-container {
@@ -12,13 +9,11 @@ font-size: calc( 24px + ( 64 - 24 ) * ( ( 100vw - 320px ) / ( 768 - 320 ) ) );
 h1.title {
   @include autoscale-font (
     (
-      // 1600 screen width -> font size 64px
+      // Breakpoint, font-size, line-height
       ( $small_desktop, 64, 72 ),
-      //  768 screen width -> font size 48px
-      ( $tablet, 32, 80 ),
-      //  below 768 screen width -> font size 36px
-      ( $mobile, 24, 32 ),
-      // Límite inferior
+      ( $tablet,        32, 80 ),
+      ( $mobile,        24, 32 ),
+      // Down limit to fix minimun size
       ( 360 )
     ),
     true // debug
